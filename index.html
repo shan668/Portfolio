@@ -1,546 +1,546 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shantanu Talan - Cybersecurity and Development</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>Shantanu Talan - Cyber Enthusiast</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts (Inter) - modern and clean -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome CDN (for icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Base font */
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Light Red/White Theme Palette */
+        /*
+         * Custom CSS Variables:
+         * These definitions apply to the default (light) state on :root.
+         */
         :root {
-            --primary-red: #cc0000; /* Vibrant, low-light red accent */
-            --subtle-bg: #fff8f8; /* Very light pink/red for subtle background */
-            --dark-text: #2c3e50; 
-            --medium-text: #999999; /* Soft Grey */
+            --primary-red: #B8332A;
+            --primary-white: #FFFFFF; /* White for cards/containers in light mode */
+            --secondary-gray: #F7F7F7; /* Main background in light mode */
+            --text-dark: #1F2937; /* Very Dark Gray/Near Black (for light mode text) */
+            --text-light: #4B5563; /* Medium Gray (for light mode secondary text) */
         }
         
-        /* Typography */
-        h1, h2, h3, h4 {
-            font-weight: 800;
-            color: var(--dark-text);
+        /* Default body styles using light mode variables */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--secondary-gray);
+            color: var(--text-dark); /* Default text color is dark */
+            transition: background-color 0.5s, color 0.5s;
         }
-        
-        /* --- Animation and Effect Styles --- */
 
-        /* 1. Subtle Fade-in on Scroll Animation (More aggressive translation) */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        /* Dark Mode Overrides (when 'dark' class is present on <html>) */
+        html.dark {
+            --primary-white: #1F2937; /* Darker background for cards/containers */
+            --secondary-gray: #0F172A; /* Darkest main background color */
+            --text-dark: #E5E7EB; /* Light text for dark mode content */
+            --text-light: #D1D5DB; /* Lighter text for dark mode secondary content */
+            /* The body inherits these new variable values */
         }
         
-        .fade-in.is-visible {
+        /* Utility Classes using CSS Variables */
+        .text-primary-red { color: var(--primary-red); }
+        .bg-primary-red { background-color: var(--primary-red); }
+        .border-primary-red { border-color: var(--primary-red); }
+        .shadow-red-strong { box-shadow: 0 10px 15px -3px rgba(184, 51, 42, 0.3), 0 4px 6px -2px rgba(184, 51, 42, 0.1); }
+        
+        /* Ensure elements using the custom white background flip in dark mode */
+        .bg-primary-white { background-color: var(--primary-white); }
+
+        /* Icon Styling */
+        .icon { min-width: 20px; }
+
+        /* Smooth Scroll Reveal Animation (using Intersection Observer) */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* 2. Button Hover Effect - Stronger lift and shadow */
-        .btn-primary {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
-            box-shadow: 0 6px 15px rgba(204, 0, 0, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(204, 0, 0, 0.6);
-            background-color: #aa0000; /* Deeper red on hover */
-        }
-
-        /* 3. Card Hover Effect (subtle lift and border highlight) */
-        .animated-card {
-            transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0f0f0;
-        }
-
-        .animated-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); 
-            border: 1px solid var(--primary-red);
-        }
         
-        /* 4. Header shadow on scroll */
-        .header-scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.9);
+        /* Status Message Styling */
+        #form-status {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out, padding-top 0.4s ease-in-out;
         }
-        
-        /* 5. Timeline Connector */
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #ddd;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 10px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: white;
-            border: 3px solid var(--primary-red);
-            transition: transform 0.3s ease;
-        }
-        
-        .timeline-item:hover::after {
-            transform: scale(1.3);
+        #form-status.visible {
+            opacity: 1;
+            max-height: 50px; /* Adjust based on expected text height */
+            padding-top: 1rem;
         }
     </style>
+    <!-- Icons Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-white text-gray-800">
-
-    <!-- 
-      =================
-      HEADER & NAVIGATION
-      =================
-    -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <!-- Logo / Name - A neutral title in the header -->
-                <a href="#home" class="text-2xl font-extrabold tracking-wider flex items-center gap-2" style="color: var(--dark-text);">
-                    <i class="fas fa-fingerprint text-xl" style="color: var(--primary-red);"></i>
-                    CYBER PORTFOLIO
-                </a>
-                
-                <!-- Navigation Links -->
-                <div class="hidden md:flex space-x-8">
-                    <a href="#about" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">About</a>
-                    <a href="#skills" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">Skills</a>
-                    <a href="#projects" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">Projects</a>
-                    <a href="#work" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">Experience</a>
-                    <a href="#education" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">Education</a>
-                    <a href="#contact" class="text-gray-600 hover:text-red-700 font-medium transition duration-150">Contact</a>
-                </div>
-            </div>
-        </nav>
+<body class="transition-colors duration-500">
+    <!-- Header/Navigation -->
+    <header class="bg-primary-red text-white shadow-xl sticky top-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto p-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-extrabold tracking-wider">SHANTANU TALAN</a>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="#projects" class="hover:text-gray-200 transition duration-300">Projects</a>
+                <a href="#skills" class="hover:text-gray-200 transition duration-300">Skills</a>
+                <a href="#experience" class="hover:text-gray-200 transition duration-300">Experience</a>
+                <a href="#academic" class="hover:text-gray-200 transition duration-300">Academic</a>
+                <a href="#contact" class="hover:text-gray-200 transition duration-300">Contact</a>
+            </nav>
+            <!-- Dark/Light Mode Toggle -->
+            <button id="theme-toggle" aria-label="Toggle theme" class="p-2 rounded-full bg-red-800 hover:bg-red-700 transition duration-300 text-white">
+                <!-- Icon will be inserted by JS -->
+            </button>
+        </div>
     </header>
 
-    <!-- 
-      =================
-      HERO SECTION 
-      =================
-    -->
-    <!-- Added pt-36 for top padding to push content down and prevent overlap with fixed header -->
-    <section id="home" class="min-h-screen flex flex-col justify-center text-center px-4 pt-36 pb-20" style="background-color: var(--subtle-bg);">
-        <div class="max-w-4xl mx-auto mt-[-100px]"> <!-- Negative margin pulls content up slightly to maintain visual center after padding -->
-            <!-- PRIMARY HEADING: "Hi, I'm Shantanu Talan" -->
-            <h1 class="text-6xl md:text-7xl font-extrabold mb-4 fade-in" style="color: var(--dark-text); transition-delay: 50ms;">
-                Hi, I’m Shantanu Talan
-            </h1>
-            
-            <!-- Secondary Typewriter Text (Role) -->
-            <p id="typewriter-text" class="text-3xl md:text-5xl font-light mb-10 fade-in" style="color: var(--primary-red); transition-delay: 200ms;">
-                MCA Cybersecurity Student
-            </p>
-            
-            <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-12 fade-in leading-relaxed" style="transition-delay: 300ms;">
-                I’m a passionate Cybersecurity Enthusiast driven by curiosity to understand how systems break, and a mission to make them stronger. Currently pursuing MCA in Cyber Security at LPU, I explore how AI and ethical hacking can shape smarter digital defense.
-            </p>
-            
-            <!-- LinkedIn Button (UPDATED LINK) -->
-            <a href="https://www.linkedin.com/in/shantanu-talan-1b4ab9316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="btn-primary inline-block py-3 px-8 text-white rounded-full font-semibold fade-in" style="background-color: var(--primary-red); transition-delay: 400ms;">
-                Connect on LinkedIn <i class="fab fa-linkedin ml-2"></i>
-            </a>
-        </div>
-    </section>
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 
-    <!-- 
-      =================
-      TECHNICAL SKILLS
-      =================
-    -->
-    <section id="skills" class="py-28 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold" style="color: var(--primary-red);">Technical Toolkit</h2>
-                <p class="text-lg" style="color: var(--medium-text);">The tools I use to build and secure applications.</p>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+        <!-- 1. Hero Section -->
+        <section id="hero" class="py-16 sm:py-24 text-center scroll-reveal">
+            <div class="flex flex-col items-center">
+                <div class="h-32 w-32 bg-primary-red rounded-full flex items-center justify-center text-5xl font-bold text-white mb-4 shadow-red-strong">ST</div>
+                <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight text-primary-red">Hi, I'm Shantanu Talan</h1>
+                <p class="text-xl sm:text-2xl font-medium mt-3 text-[var(--text-light)]">
+                    A highly enthusiastic and tech-curious <span class="text-primary-red font-bold">Cyber Enthusiast</span> focused on data integrity and secure software solutions.
+                </p>
                 
-                <!-- Skill 1: Cybersecurity -->
-                <div class="fade-in" style="transition-delay: 50ms;">
-                    <div class="p-6 bg-white rounded-xl animated-card">
-                        <i class="fas fa-user-shield text-5xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-lg font-semibold">Cybersecurity</h3>
-                    </div>
-                </div>
-                <!-- Skill 2: Java -->
-                <div class="fade-in" style="transition-delay: 100ms;">
-                    <div class="p-6 bg-white rounded-xl animated-card">
-                        <i class="fab fa-java text-5xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-lg font-semibold">Java</h3>
-                    </div>
-                </div>
-                <!-- Skill 3: Python -->
-                <div class="fade-in" style="transition-delay: 150ms;">
-                    <div class="p-6 bg-white rounded-xl animated-card">
-                        <i class="fab fa-python text-5xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-lg font-semibold">Python</h3>
-                    </div>
-                </div>
-                <!-- Skill 4: HTML/CSS -->
-                <div class="fade-in" style="transition-delay: 200ms;">
-                    <div class="p-6 bg-white rounded-xl animated-card">
-                        <i class="fas fa-globe text-5xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-lg font-semibold">HTML/CSS</h3>
-                    </div>
-                </div>
-                <!-- Skill 5: DBMS -->
-                <div class="fade-in" style="transition-delay: 250ms;">
-                    <div class="p-6 bg-white rounded-xl animated-card">
-                        <i class="fas fa-database text-5xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-lg font-semibold">DBMS</h3>
-                    </div>
+                <!-- Contact Buttons -->
+                <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <a href="https://www.linkedin.com/in/shantanu-talan-1b4ab9316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="flex items-center space-x-2 px-6 py-3 bg-primary-red text-white font-semibold rounded-full shadow-red-strong hover:bg-red-700 transition duration-300 transform hover:scale-105">
+                        <i data-lucide="linkedin" class="h-5 w-5"></i>
+                        <span>LinkedIn Profile</span>
+                    </a>
+                    <a href="https://github.com/shan668" target="_blank" class="flex items-center space-x-2 px-6 py-3 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-700 transition duration-300 transform hover:scale-105">
+                        <i data-lucide="github" class="h-5 w-5"></i>
+                        <span>GitHub Repos</span>
+                    </a>
+                    <a href="mailto:talanshantanu703@gmail.com" class="flex items-center space-x-2 px-6 py-3 border border-primary-red text-primary-red font-semibold rounded-full hover:bg-red-50 transition duration-300 transform hover:scale-105 dark:hover:bg-gray-800">
+                        <i data-lucide="mail" class="h-5 w-5"></i>
+                        <span>Email Me</span>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 
-      =================
-      PROJECTS
-      =================
-    -->
-    <section id="projects" class="py-28" style="background-color: var(--subtle-bg);">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold" style="color: var(--primary-red);">Featured Projects</h2>
-                <p class="text-lg" style="color: var(--medium-text);">Secure and analytical applications showcasing technical depth.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10">
+        <!-- 2. Skills & Expertise -->
+        <section id="skills" class="py-12 scroll-reveal">
+            <h2 class="text-3xl font-bold text-primary-red mb-8 border-b-4 border-primary-red pb-2">Skills & Expertise</h2>
+            <div class="grid md:grid-cols-3 gap-8">
                 
-                <!-- Project 1: Finance Management System -->
-                <div class="fade-in animated-card bg-white rounded-xl border border-gray-100 overflow-hidden" style="transition-delay: 50ms;">
-                    <div class="p-6">
-                        <i class="fas fa-money-bill-wave text-3xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-xl font-bold mb-3">Finance Management System</h3>
-                        <p class="text-gray-700 mb-4 text-sm font-semibold" style="color: var(--primary-red);">Focus: Java, Security, DBMS</p>
-                        <ul class="list-disc ml-4 text-gray-700 text-xs space-y-2">
-                            <li>Implemented Role-Based Access Control (RBAC) to protect sensitive financial records.</li>
-                            <li>Designed and optimized a Relational Database Schema to manage complex transaction and budgeting data.</li>
-                            <li>Utilized Prepared Statements to mitigate SQL Injection risks in the application backend.</li>
-                            <li>Developed Custom Reporting Modules for users to generate monthly financial summaries.</li>
-                            <li>Integrated robust Password Hashing functions to secure user credentials at rest.</li>
-                        </ul>
+                <!-- Technical Expertise -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg border-t-4 border-primary-red transition duration-500 hover:shadow-2xl md:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 flex items-center text-[var(--text-dark)]">
+                        <i data-lucide="code" class="h-6 w-6 text-primary-red mr-3"></i>Technical Expertise
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                        <!-- Programming Languages -->
+                        <div class="space-y-1">
+                            <h4 class="font-semibold text-primary-red mt-2 mb-1 border-b border-red-200 dark:border-red-800 pb-1">Programming Languages</h4>
+                            <ul class="text-[var(--text-light)]">
+                                <li class="flex items-center"><span class="font-bold mr-2 text-primary-red">C:</span> Low-level programming, algorithms.</li>
+                                <li class="flex items-center"><span class="font-bold mr-2 text-primary-red">Java:</span> Object-Oriented Programming, security principles.</li>
+                                <li class="flex items-center"><span class="font-bold mr-2 text-primary-red">Python:</span> Data Science, ML/NLP scripting.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Web & Database -->
+                        <div class="space-y-1">
+                            <h4 class="font-semibold text-primary-red mt-2 mb-1 border-b border-red-200 dark:border-red-800 pb-1">Web & Database</h4>
+                            <ul class="text-[var(--text-light)]">
+                                <li class="flex items-center"><span class="font-bold mr-2 text-primary-red">HTML & CSS:</span> Responsive design, semantic structure.</li>
+                                <li class="flex items-center"><span class="font-bold mr-2 text-primary-red">DBMS/SQL:</span> Relational database design, query optimization.</li>
+                            </ul>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Professional Strengths -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg border-t-4 border-primary-red transition duration-500 hover:shadow-2xl">
+                    <h3 class="text-xl font-bold mb-4 flex items-center text-[var(--text-dark)]">
+                        <i data-lucide="users" class="h-6 w-6 text-primary-red mr-3"></i>Professional Strengths
+                    </h3>
+                    <div class="text-sm text-[var(--text-light)] space-y-3">
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="h-5 w-5 text-green-500 mt-0.5 min-w-5"></i>
+                            <p><span class="font-bold">Problem-Solving:</span> Strategic analytical thinking to dissect complex security and data issues.</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="h-5 w-5 text-green-500 mt-0.5 min-w-5"></i>
+                            <p><span class="font-bold">Adaptability & Learning:</span> Rapid assimilation of new technologies (e.g., ML models, security protocols).</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="h-5 w-5 text-green-500 mt-0.5 min-w-5"></i>
+                            <p><span class="font-bold">Time Management:</span> Efficient handling of multiple project deadlines and task prioritization.</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="h-5 w-5 text-green-500 mt-0.5 min-w-5"></i>
+                            <p><span class="font-bold">Communication:</span> Clear articulation of technical findings to non-technical stakeholders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. Key Projects -->
+        <section id="projects" class="py-12 scroll-reveal">
+            <h2 class="text-3xl font-bold text-primary-red mb-8 border-b-4 border-primary-red pb-2">Key Projects</h2>
+            <div class="space-y-8">
+                
+                <!-- Project 1: Stock Price Predictor -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-l-4 border-primary-red">
+                    <h3 class="text-xl font-bold mb-2 text-[var(--text-dark)] flex items-center">
+                        <i data-lucide="trending-up" class="h-6 w-6 text-primary-red mr-3"></i>Stock Price Predictor
+                    </h3>
+                    <p class="text-sm font-semibold text-[var(--text-light)] mb-3">Focus: Python, Time-Series Analysis, Forecasting</p>
+                    <ul class="list-none space-y-2 text-[var(--text-light)] text-sm">
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Utilized Time-Series Forecasting Models such as *ARIMA* for price movement prediction.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Acquired and prepared historical financial data, ensuring integrity and consistency for training.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Conducted Exploratory Data Analysis (EDA) to identify underlying market trends and seasonality.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Integrated technical indicators (e.g., Moving Averages) as features to improve model prediction power.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Developed a robust visualization tool to compare predicted prices against actual market outcomes.</span></li>
+                    </ul>
                 </div>
 
                 <!-- Project 2: Twitter Sentiment Analysis -->
-                <div class="fade-in animated-card bg-white rounded-xl border border-gray-100 overflow-hidden" style="transition-delay: 150ms;">
-                    <div class="p-6">
-                        <i class="fab fa-twitter text-3xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-xl font-bold mb-3">Twitter Sentiment Analysis</h3>
-                        <p class="text-gray-700 mb-4 text-sm font-semibold" style="color: var(--primary-red);">Focus: Python, NLP, Machine Learning</p>
-                        <ul class="list-disc ml-4 text-gray-700 text-xs space-y-2">
-                            <li>Applied Natural Language Processing (NLP) techniques for tokenization, stemming, and data cleaning.</li>
-                            <li>Implemented a Machine Learning Classifier (e.g., Naive Bayes) to categorize real-time social media data.</li>
-                            <li>Achieved high model accuracy through rigorous cross-validation and hyperparameter tuning.</li>
-                            <li>Processed large volumes of text data, including slang and emojis, to enhance model understanding.</li>
-                            <li>Visualized sentiment distribution using charts to communicate data insights effectively.</li>
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-l-4 border-primary-red">
+                    <h3 class="text-xl font-bold mb-2 text-[var(--text-dark)] flex items-center">
+                        <i data-lucide="message-square" class="h-6 w-6 text-primary-red mr-3"></i>Twitter Sentiment Analysis
+                    </h3>
+                    <p class="text-sm font-semibold text-[var(--text-light)] mb-3">Focus: Python, NLP, Machine Learning</p>
+                    <ul class="list-none space-y-2 text-[var(--text-light)] text-sm">
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Applied *Natural Language Processing (NLP)* techniques for tokenization, stemming, and data cleaning.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Implemented a Machine Learning Classifier (e.g., Naive Bayes) to categorize real-time social media data.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Achieved high model accuracy through rigorous *cross-validation* and hyperparameter tuning.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Processed large volumes of text data, including slang and emojis, to enhance model understanding.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Visualized sentiment distribution using charts to communicate data insights effectively.</span></li>
+                    </ul>
+                </div>
+                
+                <!-- Project 3: Secure Finance Management System -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-l-4 border-primary-red">
+                    <h3 class="text-xl font-bold mb-2 text-[var(--text-dark)] flex items-center">
+                        <i data-lucide="lock" class="h-6 w-6 text-primary-red mr-3"></i>Secure Finance Management System
+                    </h3>
+                    <p class="text-sm font-semibold text-[var(--text-light)] mb-3">Focus: Java, Security, DBMS</p>
+                    <ul class="list-none space-y-2 text-[var(--text-light)] text-sm">
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Implemented *Role-Based Access Control (RBAC)* to protect sensitive financial records.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Designed and optimized a Relational Database Schema to manage complex transaction and budgeting data.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Utilized *Prepared Statements* to mitigate SQL Injection risks in the application backend.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Developed Custom Reporting Modules for users to generate monthly financial summaries.</span></li>
+                        <li class="flex items-start space-x-2"><span class="text-primary-red">✓</span><span>Integrated robust *Password Hashing* functions to secure user credentials at rest.</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. Professional Milestones -->
+        <section id="experience" class="py-12 scroll-reveal">
+            <h2 class="text-3xl font-bold text-primary-red mb-8 border-b-4 border-primary-red pb-2">Professional Milestones</h2>
+            <div class="space-y-6">
+                
+                <!-- Experience 1: Technical Recruiter -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl flex items-start space-x-4 border-l-4 border-primary-red">
+                    <i data-lucide="briefcase" class="h-8 w-8 text-primary-red icon mt-1"></i>
+                    <div>
+                        <h3 class="text-xl font-bold text-[var(--text-dark)]">Technical Recruiter</h3>
+                        <p class="text-sm font-medium text-[var(--text-light)] mb-2">United Software Group | March 2024 - May 2024 (2 Months)</p>
+                        <ul class="list-none space-y-1 text-[var(--text-light)] text-sm">
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Analyzed technical job descriptions to accurately identify essential technical skills for engineering roles.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Utilized advanced sourcing techniques and tools to identify and engage passive technical talent.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Conducted initial technical screenings to assess candidates' fluency and experience.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Coordinated complex interview schedules between candidates and hiring managers.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Maintained a structured talent pipeline in the Applicant Tracking System (ATS).</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Project 3: Stock Price Predictor -->
-                <div class="fade-in animated-card bg-white rounded-xl border border-gray-100 overflow-hidden" style="transition-delay: 250ms;">
-                    <div class="p-6">
-                        <i class="fas fa-chart-line text-3xl mb-3" style="color: var(--primary-red);"></i>
-                        <h3 class="text-xl font-bold mb-3">Stock Price Predictor</h3>
-                        <p class="text-gray-700 mb-4 text-sm font-semibold" style="color: var(--primary-red);">Focus: Python, Time-Series Analysis, Forecasting</p>
-                        <ul class="list-disc ml-4 text-gray-700 text-xs space-y-2">
-                            <li>Utilized Time-Series Forecasting Models such as ARIMA for price movement prediction.</li>
-                            <li>Acquired and prepared historical financial data, ensuring integrity and consistency for training.</li>
-                            <li>Conducted Exploratory Data Analysis (EDA) to identify underlying market trends and seasonality.</li>
-                            <li>Integrated technical indicators (e.g., Moving Averages) as features to improve model prediction power.</li>
-                            <li>Developed a robust visualization tool to compare predicted prices against actual market outcomes.</li>
+                <!-- Experience 2: Data Science Internship -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-2xl flex items-start space-x-4 border-l-4 border-primary-red">
+                    <i data-lucide="database" class="h-8 w-8 text-primary-red icon mt-1"></i>
+                    <div>
+                        <h3 class="text-xl font-bold text-[var(--text-dark)]">Data Science Internship</h3>
+                        <p class="text-sm font-medium text-[var(--text-light)] mb-2">YHILLS, NOIDA | July 2024 - August 2024 (2 Months)</p>
+                        <ul class="list-none space-y-1 text-[var(--text-light)] text-sm">
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Developed and fine-tuned machine learning models for forecasting time-series data.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Executed rigorous data preprocessing, cleaning, and normalization using Python libraries.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Engineered meaningful features from raw data to enhance model predictive accuracy.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Applied classification algorithms, including for the famous Iris flower dataset.</span></li>
+                            <li class="flex items-start space-x-2"><span class="text-primary-red">•</span><span>Documented all code, models, and data pipelines for team knowledge transfer.</span></li>
                         </ul>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </section>
-
-    <!-- 
-      =================
-      WORK EXPERIENCE
-      =================
-    -->
-    <section id="work" class="py-28 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold" style="color: var(--primary-red);">Professional Experience</h2>
-                <p class="text-lg" style="color: var(--medium-text);">Roles focused on technical engagement and data science application.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-12">
+        </section>
+        
+        <!-- 5. Academic Journey -->
+        <section id="academic" class="py-12 scroll-reveal">
+            <h2 class="text-3xl font-bold text-primary-red mb-8 border-b-4 border-primary-red pb-2">Academic Journey & Certifications</h2>
+            <div class="grid md:grid-cols-2 gap-8">
                 
-                <!-- Experience 1: Technical Recruitment (USG) -->
-                <div class="fade-in animated-card bg-white p-8 rounded-xl" style="transition-delay: 50ms;">
-                    <h3 class="text-2xl font-bold mb-1 flex items-center gap-2" style="color: var(--dark-text);">
-                        <i class="fas fa-headset text-xl" style="color: var(--primary-red);"></i> Technical Recruitment
+                <!-- Academic Timeline -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold mb-4 text-[var(--text-dark)] flex items-center">
+                        <i data-lucide="graduation-cap" class="h-6 w-6 text-primary-red mr-3"></i>Education History
                     </h3>
-                    <p class="text-lg font-medium text-gray-600 mb-3">USG | March 2024 - May 2024 (2 Months)</p>
-                    <ul class="list-disc ml-4 text-gray-700 text-sm space-y-2">
-                        <li>Analyzed technical job descriptions to accurately identify essential technical skills for engineering roles.</li>
-                        <li>Utilized advanced sourcing techniques and tools to identify and engage passive technical talent.</li>
-                        <li>Conducted initial technical screenings to assess candidates' fluency and experience.</li>
-                        <li>Coordinated complex interview schedules between candidates and hiring managers.</li>
-                        <li>Maintained a structured talent pipeline in the Applicant Tracking System (ATS).</li>
-                    </ul>
-                </div>
-
-                <!-- Experience 2: Data Science Intern (YHILLS) -->
-                <div class="fade-in animated-card bg-white p-8 rounded-xl" style="transition-delay: 150ms;">
-                    <h3 class="text-2xl font-bold mb-1 flex items-center gap-2" style="color: var(--dark-text);">
-                        <i class="fas fa-flask text-xl" style="color: var(--primary-red);"></i> Data Science Intern
-                    </h3>
-                    <p class="text-lg font-medium text-gray-600 mb-3">YHILLS, NOIDA | July 2024 - August 2024</p>
-                    <ul class="list-disc ml-4 text-gray-700 text-sm space-y-2">
-                        <li>Developed and fine-tuned machine learning models for forecasting time-series data.</li>
-                        <li>Executed rigorous data preprocessing, cleaning, and normalization using Python libraries.</li>
-                        <li>Engineered meaningful features from raw data to enhance model predictive accuracy.</li>
-                        <li>Applied classification algorithms, including for the famous Iris flower dataset.</li>
-                        <li>Documented all code, models, and data pipelines for team knowledge transfer.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 
-      =================
-      EDUCATION & CERTIFICATES (Separated)
-      =================
-    -->
-    <section id="education" class="py-28" style="background-color: var(--subtle-bg);">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16">
-                
-                <!-- Education Timeline -->
-                <div class="fade-in">
-                    <h3 class="text-3xl font-bold mb-8 text-center md:text-left" style="color: var(--primary-red);">Academic Journey</h3>
-                    <div class="space-y-6">
-                        <!-- MCA -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm timeline-item" style="transition-delay: 50ms;">
-                            <h4 class="text-xl font-bold">MCA, Cyber Security (Pursuing)</h4>
-                            <p class="text-lg font-medium text-gray-700">Lovely Professional University (LPU)</p>
-                            <p class="text-md text-gray-500">2025 - Present</p>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="laptop" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Master of Computer Applications (MCA) - Cybersecurity</p>
+                            <p class="text-sm text-[var(--text-light)]">Lovely Professional University (LPU) | Currently Pursuing (2025-2027)</p>
                         </div>
-                        <!-- BCA -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm timeline-item" style="transition-delay: 150ms;">
-                            <h4 class="text-xl font-bold">BCA - Bachelor of Computer Application</h4>
-                            <p class="text-lg font-medium text-gray-700">GLA University, Mathura</p>
-                            <p class="text-md text-gray-500">Completed 2025</p>
+                    </div>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="code-square" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Bachelor of Computer Applications (BCA)</p>
+                            <p class="text-sm text-[var(--text-light)]">GLA University, Mathura | Completed (2022-2025)</p>
                         </div>
-                        <!-- School -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm timeline-item" style="transition-delay: 250ms;">
-                            <h4 class="text-xl font-bold">Senior Secondary (XII)</h4>
-                            <p class="text-lg font-medium text-gray-700">PRFS School, Mathura</p>
-                            <p class="text-md text-gray-500">Completed 2022</p>
+                    </div>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="school" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Schooling</p>
+                            <p class="text-sm text-[var(--text-light)]">PRFS School | Completed in 2022</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Certifications -->
-                <div class="fade-in" style="transition-delay: 100ms;">
-                    <h3 class="text-3xl font-bold mb-8 text-center md:text-left" style="color: var(--primary-red);">Certificates & Training</h3>
-                    <div class="space-y-6">
-                        
-                        <!-- Infosys Certificate -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm" style="transition-delay: 50ms;">
-                            <div class="flex items-center gap-4 mb-2">
-                                <i class="fas fa-lock text-2xl" style="color: var(--primary-red);"></i>
-                                <h4 class="text-xl font-bold">Cybersecurity Fundamentals</h4>
-                            </div>
-                            <p class="text-lg font-medium text-gray-700">Infosys Springboard</p>
-                        </div>
-                         <!-- AI Certificate -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm" style="transition-delay: 150ms;">
-                            <div class="flex items-center gap-4 mb-2">
-                                <i class="fas fa-brain text-2xl" style="color: var(--primary-red);"></i>
-                                <h4 class="text-xl font-bold">Artificial Intelligence Course</h4>
-                            </div>
-                            <p class="text-lg font-medium text-gray-700">Great Learning Academy</p>
-                        </div>
-                        <!-- MongoDB Certificate -->
-                        <div class="animated-card bg-white p-6 rounded-xl shadow-sm" style="transition-delay: 250ms;">
-                            <div class="flex items-center gap-4 mb-2">
-                                <i class="fas fa-server text-2xl" style="color: var(--primary-red);"></i>
-                                <h4 class="text-xl font-bold">MongoDB Course (12hrs)</h4>
-                            </div>
-                            <p class="text-lg font-medium text-gray-700">MongoDB University</p>
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold mb-4 text-[var(--text-dark)] flex items-center">
+                        <i data-lucide="award" class="h-6 w-6 text-primary-red mr-3"></i>Certifications
+                    </h3>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="shield" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Cybersecurity Foundation</p>
+                            <p class="text-sm text-[var(--text-light)] mb-2">Issued by Infosys Springboard</p>
+                            <a href="https://www.linkedin.com/posts/shantanu-talan-1b4ab9316_hello-linkedin-recently-i-have-successfully-activity-7377404355433586688-p7RN?utm_medium=ios_app&rcm=ACoAAFBA0NgBgwxN0mWajkzTqolnfR-3ZRVTOow&utm_source=social_share_send&utm_campaign=copy_link" target="_blank" class="text-xs text-primary-red hover:text-red-700 font-semibold flex items-center">
+                                View Credential <i data-lucide="external-link" class="h-3 w-3 ml-1"></i>
+                            </a>
                         </div>
                     </div>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="scroll" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Ethics in Engineering Practice</p>
+                            <p class="text-sm text-[var(--text-light)] mb-2">Issued by NPTEL</p>
+                            <a href="https://archive.nptel.ac.in/content/noc/NOC24/SEM1/Ecertificates/110/noc24-mg17/Course/NPTEL24MG17S65040059930712170.pdf" target="_blank" class="text-xs text-primary-red hover:text-red-700 font-semibold flex items-center">
+                                View Credential <i data-lucide="external-link" class="h-3 w-3 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="brain" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">Artificial Intelligence Course</p>
+                            <p class="text-sm text-[var(--text-light)] mb-2">Issued by Great Learning Academy</p>
+                            <a href="https://www.linkedin.com/posts/shantanu-talan-1b4ab9316_im-happy-to-share-that-ive-obtained-a-new-activity-7312355450245521409-6W8v?utm_medium=ios_app&rcm=ACoAAFBA0NgBgwxN0mWajkzTqolnfR-3ZRVTOow&utm_source=social_share_send&utm_campaign=copy_link" target="_blank" class="text-xs text-primary-red hover:text-red-700 font-semibold flex items-center">
+                                View Credential <i data-lucide="external-link" class="h-3 w-3 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-primary-white p-5 rounded-xl shadow-md border-l-4 border-primary-red transition duration-300 hover:shadow-xl flex items-start space-x-3">
+                        <i data-lucide="database" class="h-6 w-6 text-primary-red icon"></i>
+                        <div>
+                            <p class="font-bold text-[var(--text-dark)]">MongoDB Database Course (12hrs)</p>
+                            <p class="text-sm text-[var(--text-light)] mb-2">Issued by MongoDB University</p>
+                            <a href="https://www.linkedin.com/posts/shantanu-talan-1b4ab9316_im-happy-to-share-that-ive-obtained-a-new-activity-7311729160186380290-EbEa?utm_medium=ios_app&rcm=ACoAAFBA0NgBgwxN0mWajkzTqolnfR-3ZRVTOow&utm_source=social_share_send&utm_campaign=copy_link" target="_blank" class="text-xs text-primary-red hover:text-red-700 font-semibold flex items-center">
+                                View Credential <i data-lucide="external-link" class="h-3 w-3 ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Contact Section -->
+        <section id="contact" class="py-12 scroll-reveal">
+            <h2 class="text-3xl font-bold text-primary-red mb-8 border-b-4 border-primary-red pb-2">Connect With Me</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Contact Form (Mailto Implementation) -->
+                <div class="bg-primary-white p-6 rounded-xl shadow-lg transition duration-500 hover:shadow-2xl">
+                    <h3 class="text-xl font-bold text-[var(--text-dark)] mb-4">Send Me a Message</h3>
+                    <!-- Form action removed, submission is now handled fully by JS for feedback -->
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-[var(--text-light)]">Your Name</label>
+                            <input type="text" id="name" name="name" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-primary-red focus:ring-primary-red dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-[var(--text-light)]">Your Email</label>
+                            <input type="email" id="email" name="email" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-primary-red focus:ring-primary-red dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-[var(--text-light)]">Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-primary-red focus:ring-primary-red dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                        </div>
+                        <button type="submit" class="w-full px-4 py-2 bg-primary-red text-white font-semibold rounded-md shadow-lg hover:bg-red-700 transition duration-300">
+                            Send Email
+                        </button>
+                    </form>
+                    <!-- Status message element is always present but uses CSS transitions to show/hide -->
+                    <p id="form-status" class="mt-4 text-sm font-medium text-center rounded-md p-3 text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-300"></p>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-    <!-- 
-      =================
-      CONTACT
-      =================
-    -->
-    <section id="contact" class="py-28 bg-white text-center">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 fade-in">
-            <h2 class="text-4xl font-bold" style="color: var(--primary-red);">Let's Secure the Future Together</h2>
-            <p class="text-lg text-gray-700 mt-4 mb-10">
-                I am actively seeking challenging roles in cybersecurity and development. Let's connect and discuss how my skills can benefit your team.
-            </p>
-            
-            <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-lg md:text-xl font-medium">
-                <div class="flex items-center gap-3 fade-in" style="transition-delay: 100ms;">
-                    <i class="fas fa-envelope text-2xl" style="color: var(--primary-red);"></i>
-                    <a href="mailto:talanshantanu703@gmail.com" class="text-gray-800 hover:text-red-700 transition duration-150">talanshantanu703@gmail.com</a>
+                <!-- Contact Details and Final Links -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold text-[var(--text-dark)] mb-4">Quick Links</h3>
+                    
+                    <div class="space-y-4">
+                        <a href="mailto:talanshantanu703@gmail.com" class="flex items-center space-x-4 p-4 bg-primary-white rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                            <i data-lucide="mail" class="h-6 w-6 text-primary-red icon"></i>
+                            <span class="font-medium text-[var(--text-dark)]">talanshantanu703@gmail.com</span>
+                        </a>
+                        
+                        <a href="tel:+919520737585" class="flex items-center space-x-4 p-4 bg-primary-white rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                            <i data-lucide="phone" class="h-6 w-6 text-primary-red icon"></i>
+                            <span class="font-medium text-[var(--text-dark)]">+91 95207 37585</span>
+                        </a>
+                        
+                        <a href="https://github.com/shan668" target="_blank" class="flex items-center space-x-4 p-4 bg-primary-red text-white rounded-xl shadow-red-strong hover:bg-red-700 transition duration-300">
+                            <i data-lucide="github" class="h-6 w-6"></i>
+                            <span class="font-medium">GitHub Profile</span>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/in/shantanu-talan-1b4ab9316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="flex items-center space-x-4 p-4 bg-primary-red text-white rounded-xl shadow-red-strong hover:bg-red-700 transition duration-300">
+                            <i data-lucide="linkedin" class="h-6 w-6"></i>
+                            <span class="font-medium">LinkedIn Profile</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3 fade-in" style="transition-delay: 200ms;">
-                    <i class="fas fa-phone text-2xl" style="color: var(--primary-red);"></i>
-                    <span class="text-gray-800">+91 95207 37585</span>
-                </div>
             </div>
-            
-            <!-- LinkedIn Button (UPDATED LINK) -->
-            <div class="mt-12 fade-in" style="transition-delay: 300ms;">
-                <a href="https://www.linkedin.com/in/shantanu-talan-1b4ab9316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="btn-primary inline-block py-3 px-8 text-white rounded-full font-semibold" style="background-color: var(--primary-red);">
-                    Connect on LinkedIn
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 
-      =================
-      FOOTER
-      =================
-    -->
-    <footer class="py-6 bg-gray-900 text-gray-400 text-center">
-        <p class="text-sm">&copy; 2025 Shantanu Talan. Securely Built.</p>
-    </footer>
-
-
-    <!-- 
-      =================
-      JAVASCRIPT
-      =================
-    -->
-    <script>
-        // --- 1. Animation on Scroll (IntersectionObserver) ---
-        const fadeInElements = document.querySelectorAll('.fade-in');
+        </section>
         
-        const observerOptions = {
-            root: null, // relative to viewport
-            rootMargin: '0px',
-            threshold: 0.1 // 10% of element visible
+        <!-- Adorable Footer -->
+        <footer class="text-center py-8 mt-12 border-t border-gray-300 dark:border-gray-700 scroll-reveal">
+            <p class="text-lg font-semibold text-primary-red">
+                "Driven by curiosity, secured by code."
+            </p>
+            <p class="text-sm text-[var(--text-light)] mt-2">
+                &copy; 2024 Shantanu Talan. Built with passion and a strong desire to learn.
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Theme Toggle Logic (unchanged)
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement; 
+
+        const setIcon = (isDark) => {
+            if (!themeToggle || typeof lucide === 'undefined') return;
+            themeToggle.innerHTML = isDark 
+                ? '<i data-lucide="moon" class="h-5 w-5 toggle-icon"></i>' 
+                : '<i data-lucide="sun" class="h-5 w-5 toggle-icon"></i>';
+            lucide.createIcons();
         };
 
-        const observerCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                } 
-            });
-        };
+        const loadTheme = () => {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let isDark = false;
 
-        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+            if (localStorage.theme === 'dark') {
+                isDark = true;
+            } else if (localStorage.theme === 'light') {
+                isDark = false;
+            } else if (prefersDark) {
+                isDark = true;
+            }
 
-        fadeInElements.forEach(el => {
-            scrollObserver.observe(el);
-        });
-
-        // --- 2. Typewriter Effect for Hero Section ---
-        const typewriterElement = document.getElementById('typewriter-text');
-        const phrases = [
-            "MCA Cybersecurity Student",
-            "Passionate Cybersecurity Enthusiast",
-            "Aspiring Security Professional",
-            "Data & Network Defender",
-        ];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
-            let displayText = '';
-
-            if (isDeleting) {
-                displayText = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
+            if (isDark) {
+                root.classList.add('dark');
             } else {
-                displayText = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
+                root.classList.remove('dark');
             }
+            setIcon(isDark);
+        };
 
-            typewriterElement.textContent = displayText;
+        const toggleTheme = () => {
+            const isDark = root.classList.toggle('dark');
+            localStorage.theme = isDark ? 'dark' : 'light';
+            setIcon(isDark);
+        };
 
-            let typeSpeed = 100;
-            if (isDeleting) {
-                typeSpeed = 50; 
-            }
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                typeSpeed = 2500;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typeSpeed = 200;
-            }
-
-            setTimeout(type, typeSpeed);
+        loadTheme();
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
         }
         
-        window.addEventListener('load', () => {
-            setTimeout(type, 1000); 
+        // 2. Scroll Reveal Animation Logic (unchanged)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.1
         });
 
-        // --- 3. Sticky Header with Shadow on Scroll ---
-        const header = document.getElementById('header');
-        window.onscroll = function() {
-            if (window.scrollY > 50) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-        };
+        document.querySelectorAll('.scroll-reveal').forEach(section => {
+            observer.observe(section);
+        });
+        
+        // 3. Contact Form Status & Submission Logic (UPDATED)
+        document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop the form from submitting immediately
+            
+            const form = e.target;
+            const formStatus = document.getElementById('form-status');
+            
+            // Get values from form inputs
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Construct the mailto link content
+            const subject = encodeURIComponent(Portfolio Message from ${name});
+            const body = encodeURIComponent(From: ${name} <${email}>\n\nMessage:\n${message});
+            const mailtoLink = mailto:talanshantanu703@gmail.com?subject=${subject}&body=${body};
+            
+            // 1. Show Feedback Message
+            formStatus.textContent = "Thank you! Preparing your email draft now...";
+            formStatus.classList.add('visible');
+            
+            // 2. Reset the form visually
+            form.reset();
+
+            // 3. Delay the mailto action so the user sees the confirmation
+            setTimeout(() => {
+                window.location.href = mailtoLink;
+                
+                // Hide the status message after a brief pause after mailto is triggered
+                setTimeout(() => {
+                    formStatus.classList.remove('visible');
+                }, 1000); 
+
+            }, 500); // 500ms delay to show the message
+        });
+        
+        // 4. Global Icon Rendering (Ensures all static icons render)
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
     </script>
-
 </body>
 </html>
