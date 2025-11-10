@@ -513,9 +513,9 @@
             const message = document.getElementById('message').value;
 
             // Construct the mailto link content
-            const subject = encodeURIComponent(Portfolio Message from ${name});
-            const body = encodeURIComponent(From: ${name} <${email}>\n\nMessage:\n${message});
-            const mailtoLink = mailto:talanshantanu703@gmail.com?subject=${subject}&body=${body};
+            const subject = encodeURIComponent(`Portfolio Message from ${name}`)
+            const body = encodeURIComponent(`From: ${name} <${email}>\n\nMessage:\n${message}`);
+            const mailtoLink = `mailto:talanshantanu703@gmail.com?subject=${subject}&body=${body}`;
             
             // 1. Show Feedback Message
             formStatus.textContent = "Thank you! Preparing your email draft now...";
